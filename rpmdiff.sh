@@ -27,6 +27,7 @@ declare -r myname='rpmdiff'
 declare -r myver='1.0'
 
 diffprog=${DIFFPROG:-'vim -d'}
+rpmprog=${RPMPROG:-'rpm'}
 diffsearchpath=${DIFFSEARCHPATH:-/etc}
 USE_COLOR='y'
 declare -a oldsaves
@@ -84,6 +85,7 @@ General Options:
 
 Environment Variables:
   DIFFPROG          override the merge program: (default: 'vim -d')
+  RPMPROG           override the rpm program: (default: 'rpm')
   DIFFSEARCHPATH    override the search path. (only when using find)
                     (default: /etc)
 
@@ -201,18 +203,22 @@ while IFS= read -u 3 -r -d '' rpmfile; do
     msg2 "Files are identical, removing..."
     rm -v "$rpmfile"
   else
-    ask "(V)iew, (S)kip, (R)emove %s, (O)verwrite with %s, (Q)uit: [v/s/r/o/q] " "$file_type" "$file_type"
+    ask "(V)iew, (S)kip, (R)emove %s, (O)verwrite with %s, (I)dentify owner, (Q)uit: [v/s/r/o/i/q] " "$file_type" "$file_type"
     while read c; do
       case $c in
         q|Q) exit 0;;
         r|R) rm -v "$rpmfile"; break ;;
         o|O) mv -v "$rpmfile" "$file"; break ;;
+        i|I)
+          $rpmprog -qf "$file";
+          ask "(V)iew, (S)kip, (R)emove %s, (O)verwrite with %s, (I)dentify owner, (Q)uit: [v/s/r/o/i/q] " "$file_type" "$file_type";
+          continue ;;
         v|V)
           $diffprog "$rpmfile" "$file"
-          ask "(V)iew, (S)kip, (R)emove %s, (O)verwrite with %s, (Q)uit: [v/s/r/o/q] " "$file_type" "$file_type";
+          ask "(V)iew, (S)kip, (R)emove %s, (O)verwrite with %s, (I)dentify owner, (Q)uit: [v/s/r/o/i/q] " "$file_type" "$file_type";
           continue ;;
         s|S) break ;;
-        *) ask "Invalid answer. Try again: [v/s/r/o/q] "; continue ;;
+        *) ask "Invalid answer. Try again: [v/s/r/o/i/q] "; continue ;;
       esac
     done
   fi
