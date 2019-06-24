@@ -17,6 +17,7 @@ rpmdiff.sh [-l | -f | -p] [--nocolor]
 
 ### Environment Variables:
 - `DIFFPROG` override the merge program: (default: 'vim -d')
+- `RPMPROG` override the rpm program to use for the i option: (default: 'rpm')
 - `DIFFSEARCHPATH` override the search path. (only when using find) (default: /etc)
 
 #### Examples:
