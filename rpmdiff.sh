@@ -208,7 +208,7 @@ while IFS= read -u 3 -r -d '' rpmfile; do
       case $c in
         q|Q) exit 0;;
         r|R) rm -v "$rpmfile"; break ;;
-        o|O) mv -v "$rpmfile" "$file"; break ;;
+        o|O) cp -v "$rpmfile" "$file" && rm "$rpmfile"; break ;;
         i|I)
           $rpmprog -qf "$file";
           ask "(V)iew, (S)kip, (R)emove %s, (O)verwrite with %s, (I)dentify owner, (Q)uit: [v/s/r/o/i/q] " "$file_type" "$file_type";
