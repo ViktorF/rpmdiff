@@ -5,7 +5,7 @@ rpmdiff is a simple script to find and merge new config files in an RPM based Li
 
 ## Usage:
 ```
-rpmdiff.sh [-l | -f | -p] [--nocolor]
+rpmdiff.sh [-l | -f | -s | -b] [--nocolor]
 ```
 ### Search Options:     select one (default: --find)
 - `-l/--locate` scan using locate
@@ -14,6 +14,8 @@ rpmdiff.sh [-l | -f | -p] [--nocolor]
 ### General Options:
 - `-o/--output` print files instead of merging them
 - `--nocolor` remove colors from output
+- `-s/--sudo` use sudo to merge/remove files
+- `-b/--backup` when overwriting, save old files with .bak
 
 ### Environment Variables:
 - `DIFFPROG` override the merge program: (default: 'vim -d')
